@@ -113,9 +113,8 @@ def row_inside_polygon(p, perimeter):
     :param perimeter: List of [latitude, longitude] that makes up a perimeter
     :return: Boolean
     """
-    pp = [Point(d[0], d[1]) for d in perimeter]
+    pp = [Point(d[1], d[0]) for d in perimeter]
     return isInside(pp, len(pp), Point(p.latitude, p.longitude))
-
 
 def run_inside_polygon(perimeter, gps_points):
     data = []
@@ -142,17 +141,16 @@ def totals_inside_polygon(polygon, gps_points):
     )
 
 
-def twoD_total_inside_polygon(polygon, gps_points):
-    df = run_inside_polygon(polygon, gps_points)
+def twoD_total_inside_polygon(df):
     return (
         df
         .join(df[['time', 'latitude', 'longitude']].shift(1), rsuffix='_previous')
         .dropna()
         .assign(time_delta=lambda d: (d['time'] - d['time_previous']))
         .assign(distance=lambda d:
-                    twoD_distance_between_coordinates(
-                    (d['latitude'], d['longitude']),
-                    (d['latitude_previous'], d['longitude_previous'])))
+                    twoD_distance_between_coordinates_in_metres(
+                    d['latitude'], d['longitude'],
+                    d['latitude_previous'], d['longitude_previous']))
         .loc[lambda d: d['inside'] == True]
         [['time_delta', 'distance']]
         .sum()
