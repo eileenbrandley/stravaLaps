@@ -124,8 +124,7 @@ def run_inside_polygon(perimeter, gps_points):
     return pd.DataFrame(data, columns=['latitude', 'longitude', 'time', 'inside'])
 
 
-def totals_inside_polygon(polygon, gps_points):
-    df = run_inside_polygon(polygon, gps_points)
+def totals_inside_polygon(df):
     return (
         df
         .join(df[['time', 'latitude', 'longitude', 'elevation']].shift(1), rsuffix='_previous')

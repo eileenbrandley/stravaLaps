@@ -3,7 +3,7 @@ import datetime
 
 # create a peewee database instance -- our models will use this database to
 # persist information
-DATABASE = "../data/sqlite/BridleCrew"
+DATABASE = "data/sqlite/BridleCrew"
 database = SqliteDatabase(DATABASE)
 
 # model definitions -- the standard "pattern" is to define a base model class
@@ -42,16 +42,11 @@ def get_athlete_id(athlete):
     return i.id
 
 
-def calculate_epoch(y, m, d):
-    return datetime.datetime(y, m, d, 0, 0, tzinfo=datetime.timezone.utc).timestamp()
-
-
 def add_run_from_athlete(athlete, date, distance, time):
     i = get_athlete_id(athlete)
-    t = calculate_epoch(*date)
     Run.create(
-        athlete_id=2,
-        date= int(t),
+        athlete_id=i,
+        date=date,
         distance=distance,
         time=time)
 

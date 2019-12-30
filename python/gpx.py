@@ -7,7 +7,7 @@ from datetime import datetime
 import gpx_parser as parser
 import xml.etree.ElementTree as ET
 """
-Script to reda and parse Strava tracks
+Script to read and parse Strava tracks
 """
 
 def parse_gpx_file(filename):
